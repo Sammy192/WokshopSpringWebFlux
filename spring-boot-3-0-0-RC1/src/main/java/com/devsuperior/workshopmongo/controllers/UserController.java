@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.devsuperior.workshopmongo.dto.PostDTO;
 import com.devsuperior.workshopmongo.dto.UserDTO;
 import com.devsuperior.workshopmongo.services.UserService;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,6 +38,16 @@ public class UserController {
 	public Mono<ResponseEntity<UserDTO>> findById(@PathVariable String id) {
 		return service.findById(id)
 				.map(userDTO -> ResponseEntity.ok().body(userDTO));
+	}
+
+	@PostMapping
+	public Mono<ResponseEntity<UserDTO>> insert(@RequestBody UserDTO dto, UriComponentsBuilder builder) {
+		return service.insert(dto)
+				.map(newUser -> ResponseEntity
+						.created(builder.path("/users/{id}")
+								.buildAndExpand(newUser.getId()).toUri())
+						.body(newUser)
+				);
 	}
 
 
