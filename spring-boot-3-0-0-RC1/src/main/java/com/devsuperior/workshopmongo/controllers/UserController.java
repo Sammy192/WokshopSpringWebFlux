@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.devsuperior.workshopmongo.dto.PostDTO;
 import com.devsuperior.workshopmongo.dto.UserDTO;
 import com.devsuperior.workshopmongo.services.UserService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -27,39 +29,15 @@ public class UserController {
 	private UserService service;
 
 	@GetMapping
-	public ResponseEntity<List<UserDTO>> findAll() {
-		List<UserDTO> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+	public Flux<UserDTO> findAll() {
+		return  service.findAll();
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
-		UserDTO dto = service.findById(id);
-		return ResponseEntity.ok(dto);
-	}
-	
-	@GetMapping(value = "/{id}/posts")
-	public ResponseEntity<List<PostDTO>> findPosts(@PathVariable String id) {
-		List<PostDTO> list = service.findPosts(id);
-		return ResponseEntity.ok().body(list);
+	public Mono<ResponseEntity<UserDTO>> findById(@PathVariable String id) {
+		return service.findById(id)
+				.map(userDTO -> ResponseEntity.ok().body(userDTO));
 	}
 
-	@PostMapping
-	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto) {
-		dto = service.insert(dto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
-		return ResponseEntity.created(uri).body(dto);
-	}
 
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable String id, @RequestBody UserDTO dto) {
-		dto = service.update(id, dto);
-		return ResponseEntity.ok(dto);
-	}
-	
-	@DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 }
