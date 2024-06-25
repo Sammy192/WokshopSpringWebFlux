@@ -1,3 +1,8 @@
+# Objetivo
+Este é um repo que foi construido durante o workshop do curso Spring Reference da DevSuperior. Objetivo de mudar de Spring MVC para Spring WebFlux no qual
+foi abordado conceitos sobre o tópico em questão.
+
+
 # ![DevSuperior logo](https://raw.githubusercontent.com/devsuperior/bds-assets/main/ds/devsuperior-logo-small.png) Spring MongoDB Reference Project
 >  *This repository aims to provide the Reference project spring boot and mongodb to be used in DevSuperior courses*
 
