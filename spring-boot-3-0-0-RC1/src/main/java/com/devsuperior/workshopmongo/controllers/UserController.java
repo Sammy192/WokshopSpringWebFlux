@@ -50,5 +50,10 @@ public class UserController {
 				);
 	}
 
+	@PutMapping(value = "/{id}")
+	public Mono<ResponseEntity<UserDTO>> update(@PathVariable String id, @RequestBody UserDTO dto) {
+		return service.update(id, dto).map(userUpdated -> ResponseEntity.ok().body(userUpdated));
+	}
+
 
 }
